@@ -28,6 +28,8 @@ CREATE UNIQUE INDEX name ON hive(owner, name);
 CREATE TABLE sample (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY(id),
-  filename VARCHAR(1024) NOT NULL,
-  hive MEDIUMINT NOT NULL REFERENCES hive(id)
+  hive MEDIUMINT NOT NULL REFERENCES hive(id),
+  timestamp BIGINT NOT NULL
 );
+
+CREATE UNIQUE INDEX timestamp on sample (hive, timestamp);

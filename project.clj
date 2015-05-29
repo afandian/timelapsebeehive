@@ -15,7 +15,10 @@
                  [org.clojure/data.json "0.2.5"]
                  [clj-time "0.8.0"]
                  [camel-snake-kebab "0.3.0" :exclusions [org.clojure/clojure]]
-                 [selmer "0.8.2"]]
+                 [selmer "0.8.2"]
+                 [ring-basic-authentication "1.0.5"]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]]
   :main ^:skip-aot timelapsebeehive.core
   :target-path "target/%s"
+  :jvm-opts ["-Duser.timezone=UTC"]
   :profiles {:uberjar {:aot :all}})

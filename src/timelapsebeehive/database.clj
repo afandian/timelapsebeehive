@@ -18,7 +18,10 @@
   (entity-fields :id :owner :name :notes))
 
 (defentity sample
-  (entity-fields :id :filename :hive))
+  (entity-fields :id :filename :hive :timestamp)
+  
+  (transform (fn [sample]
+               (assoc sample :datetime (coerce/from-long (:timestamp sample))))))
 
 ; User
 
@@ -41,6 +44,8 @@
   []
   (select hive))
 
+(defn hive-by-id [id]
+  (first (select hive (where {:id id}))))
 
 (defn hives-for-user
   [user-id]
@@ -49,3 +54,25 @@
 (defn hive-for-user
   [user-id hive-name]
   (first (select hive (where {:owner user-id :name hive-name}))))
+
+; Recordings
+
+(defn samples-for-hive
+  [hive-id]
+  (select sample (where {:hive hive-id})))
+
+(defn earliest-sample-for-hive
+  [hive-id]
+  (first (select sample (where {:hive hive-id}) (order :timestamp :ASC))))
+
+(defn latest-sample-for-hive
+  [hive-id]
+  (first (select sample (where {:hive hive-id}) (order :timestamp :DESC))))
+
+(defn samples-between
+  [hive-id start end]
+  "Return only timestamp between start and end timestamps."
+  (map :timestamp (select sample
+          (where {:hive hive-id})
+          (where (>= :timestamp start))
+          (where (<= :timestamp end)))))

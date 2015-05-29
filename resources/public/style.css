@@ -2,12 +2,17 @@
  * Globals
  */
 
+.spectrogram-date {
+  font-size: 1.8em;
+  padding: 20px;
+}
+
 /* Links */
 a,
 a:focus,
 a:hover {
   /*color: #fff;*/
-  color: rgb(232, 176, 12);
+  color: rgb(232, 205, 128);
 }
 
 /* Custom default button */
@@ -32,8 +37,7 @@ body {
   background-color: #333;
 }
 body {
-  /*color: #fff;*/
-
+  font-size: 12pt;
   color: rgb(232, 176, 12);
   text-align: center;
   text-shadow: 0 1px 3px rgba(0,0,0,.5);

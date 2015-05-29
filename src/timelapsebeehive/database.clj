@@ -18,7 +18,7 @@
   (entity-fields :id :owner :name :notes))
 
 (defentity sample
-  (entity-fields :id :filename :hive :timestamp)
+  (entity-fields :id :hive :timestamp)
   
   (transform (fn [sample]
                (assoc sample :datetime (coerce/from-long (:timestamp sample))))))

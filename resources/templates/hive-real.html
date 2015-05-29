@@ -1,0 +1,27 @@
+{% extends "templates/base.html" %}
+
+{% block "title" %}Timelapse Beehive{% endblock %}
+
+{% block "heading" %}Timelapse Beehive{% endblock %}
+
+{% block "main" %}
+<div class="inner cover">
+  <h1 class="cover-heading">{{hive.name}}</h1>
+  <p class="lead">{{hive.notes}}<br />Recordings from {{earliest-sample.datetime|date:"dd-MMMM-yyyy"}} to {{latest-sample.datetime|date:"dd-MMMM-yyyy"}}</p>
+ <br />
+
+<table>
+{% for day in day-range %}
+<tr>
+  <td class="spectrogram-date">{{day.date|date:"dd-MMMM-yyyy"}}</td>
+  <td>
+    <img src="{{hive.spectrogram-link}}?start={{day.start-timestamp}}&end={{day.end-timestamp}}&skip=900000&width=300&height=64&legend=false" /><br />
+    <audio controls="" style="width: 300px; height: 20px" src="{{hive.timelapse-link}}?start={{day.start-timestamp}}&end={{day.end-timestamp}}&skip=900000"></audio>
+  </td>
+</tr>
+{% endfor %}
+</table>
+<p><a href="/faq">Read the FAQ</a> to find out how these are produced.</p>
+  
+</div>
+{% endblock %}

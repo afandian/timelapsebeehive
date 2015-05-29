@@ -1,0 +1,6 @@
+{:port 6543
+ :storage-dir "/path/to/storage"
+ :creds {:username "username" :password "password"}
+ :db-username "username"
+ :db-password "password"
+ :db-name "timelapsebeehive"}

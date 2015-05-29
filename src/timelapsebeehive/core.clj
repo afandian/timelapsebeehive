@@ -1,13 +1,12 @@
 (ns timelapsebeehive.core
   (:require [org.httpkit.server :as server])
-  (:require [timelapsebeehive.handlers :as handlers])
+  (:require [timelapsebeehive.handlers :as handlers]
+            [timelapsebeehive.util :refer [config]])
   (:require [selmer.parser :refer [cache-off!]])
   (:gen-class))
 
 ; For use in REPL.
 (defonce s (atom nil))
-
-(def config {:port 6543})
 
 (defn stop-server
   []

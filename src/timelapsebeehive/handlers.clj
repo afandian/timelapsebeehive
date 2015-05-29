@@ -1,7 +1,8 @@
 (ns timelapsebeehive.handlers
   (:require [timelapsebeehive.database :as db]
             [timelapsebeehive.recordings :as recordings]
-            [timelapsebeehive.util :as util])
+            [timelapsebeehive.util :as util]
+            [timelapsebeehive.util :refer [config]])
   (:require [clojure.java.io :as io]
             [clj-time.core :as time]
             [clj-time.coerce :as coerce])
@@ -26,10 +27,6 @@
   (:require [selmer.parser :refer [render-file]])
   (:require [clojure.core.async :refer [>!!]])
   (:import (java.io File InputStream FileInputStream)))
-
-; TODO temporary, 
-(def cred {:username "joe" :password "joe"})
-(def config {:storage-dir "/Users/joe/personal/langstroth-storage"})
 
 ; Maximum number of recordings that can be spliced into one timelapse (limitation of command-line).
 (def max-slice-count 121)
@@ -265,11 +262,11 @@
                        [spectrogram-f {::spectrogram-f spectrogram-f}]))
   :handle-ok (fn [ctx] (new FileInputStream (::spectrogram-f ctx))))
 
-  (defn authenticated? [username password]
+(defn authenticated? [username password]
   (when (and 
-          (= (:username cred) username)
-          (= (:password cred) password))
-    "JOE"))
+          (= (-> config :creds :username) username)
+          (= (-> config :creds :password) password))
+    username))
    
 (defroutes app-routes
   (GET "/" [] (index))

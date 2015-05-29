@@ -1,0 +1,15 @@
+{% extends "templates/base.html" %}
+
+{% block "title" %}Timelapse Beehive{% endblock %}
+
+{% block "heading" %}Timelapse Beehive{% endblock %}
+
+{% block "main" %}
+<div class="inner cover">
+  <h1 class="cover-heading">Hives</h1>
+  {% for hive in hives %}
+  <h2>{{hive}}</h2>
+  {% endfor %}
+  <p>If you have a beehive and you'd like to get involved, I've love to hear from you.</p>
+</div>
+{% endblock %}

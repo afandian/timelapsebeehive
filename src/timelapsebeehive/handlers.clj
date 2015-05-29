@@ -126,18 +126,16 @@
               (let [hive (::hive ctx)
                     earliest-sample (db/earliest-sample-for-hive (:id hive))
                     latest-sample (db/latest-sample-for-hive (:id hive))
-                    day-range (util/day-range (:datetime earliest-sample) (:datetime latest-sample))
+                    day-range (when (and earliest-sample latest-sample) (util/day-range (:datetime earliest-sample) (:datetime latest-sample)))
                     
-                    day-range (map (fn [date] {:date date
+                    day-range (when day-range (map (fn [date] {:date date
                                                :start-timestamp (coerce/to-long date)
                                                :end-timestamp (coerce/to-long (time/plus date (time/hours 24)))
-                                               } ) day-range)
+                                               } ) day-range))
                     
-                    all-samples (db/samples-for-hive (:id hive))
                     response {:hive (export-hive hive)
                               :earliest-sample earliest-sample
                               :latest-sample latest-sample
-                              :samples all-samples
                               :day-range day-range
                               :navigation {:page "hives"}}]
                 (render-response ctx response "templates/hive.html"))))

@@ -19,10 +19,9 @@
 (defn shell [args]
   (prn "Shell" args)
   (let [s (.exec (Runtime/getRuntime) (into-array String args))]
-      (.waitFor s)))
+      (prn "WAIT" (.waitFor s))))
 
 (defn process-file
-  "Convert the file to MP3"
   [f]
   (let [wav-filename (.getAbsolutePath f)
         output-filename (str (.substring wav-filename 0 (- (.length wav-filename) 4)) ".short.wav")]
@@ -83,7 +82,9 @@
 (defn generate-spectrogram
   "Generate spectrogram from mp3"
   [hive-id start end skip input-f width height legend]
-  (let [output (new File (new File (:storage-dir config)) (str "/spectrograms/" hive-id "/" start "-" end "-" skip ".mp3"))]
+  
+  (let [output (new File (new File (:storage-dir config)) (str "/spectrograms/" hive-id "/" start "-" end "-" skip "-" width "x" height "-" legend ".png"))]
+    (prn "GENERATE" output (.exists output))
     (if (.exists output)
       output
       (let [duration-millis (- end start)
@@ -99,7 +100,9 @@
                                          :hours (str (int (/ duration-minutes 60)) " hours")
                                          :days (str (int (/ duration-minutes (* 60 24))) " days")))
             
-            spectrogram-command ["sox" (str (.getAbsolutePath input-f)) "-n" "spectrogram" "-l" "-t" title "-o" (str (.getAbsolutePath output)) "-x" (str width) "-y" (str height) (if legend "" "-r")]]
+            spectrogram-command ["sox" (str (.getAbsolutePath input-f)) "-n" "spectrogram" "-l" "-t" title "-o" (str (.getAbsolutePath output)) "-x" (str width) "-y" (str height)]
+            spectrogram-command (if legend (conj spectrogram-command "-r") spectrogram-command)
+            ]
     (.mkdirs (.getParentFile output))
     (shell spectrogram-command)
     output))))

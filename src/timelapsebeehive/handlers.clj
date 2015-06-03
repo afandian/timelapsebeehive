@@ -105,6 +105,16 @@
                     response {:users users :navigation {:page "faq"}}]
                 (render-response ctx response "templates/faq.html"))))
 
+(defresource open-source
+  []
+  :allowed-methods [:get]
+  :available-media-types ["application/json" "text/html"]
+  :handle-ok (fn [ctx]
+              (let [users (db/all-users)
+                    users (map #(export-user % true) users)
+                    response {:users users :navigation {:page "open-source"}}]
+                (render-response ctx response "templates/open-source.html"))))
+
 (defresource hives
   []
   :allowed-methods [:get]
@@ -271,6 +281,7 @@
   (GET "/story" [] (story))
   (GET "/hives" [] (hives))
   (GET "/faq" [] (faq))
+  (GET "/open-source" [] (open-source))
   (GET "/hives/:id" [id] (hive id))
   (GET "/hives/:id/spectrogram" [id] (hive-spectrogram id))
   (GET "/hives/:id/timelapse" [id] (hive-timelapse id))
@@ -285,6 +296,6 @@
 
 (def app
   (-> app-routes
-     (wrap-session {:store (cookie-store {:key "TODO"})})
+     (wrap-session {:store (cookie-store {:key (:cookie-store-key config)})})
      (wrap-stacktrace)
      (wrap-params)))

@@ -3,4 +3,5 @@
  :creds {:username "username" :password "password"}
  :db-username "username"
  :db-password "password"
- :db-name "timelapsebeehive"}
+ :db-name "timelapsebeehive"
+ :cookie-store-key}

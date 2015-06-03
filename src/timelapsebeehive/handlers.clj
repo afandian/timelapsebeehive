@@ -296,6 +296,6 @@
 
 (def app
   (-> app-routes
-     (wrap-session {:store (cookie-store {:key (:cookie-store-key config)})})
+     (wrap-session {:store (cookie-store {:key (.getBytes (:cookie-store-key config) "utf-8")})})
      (wrap-stacktrace)
      (wrap-params)))

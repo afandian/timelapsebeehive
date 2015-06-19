@@ -1,12 +1,11 @@
 (ns timelapsebeehive.recordings
   (:require [timelapsebeehive.util :as util]
-             [timelapsebeehive.database :as db])
+             [timelapsebeehive.database :as db]
+             [timelapsebeehive.util :refer [config]])
   (:import (java.io File InputStream FileInputStream))
   (:require [clojure.core.async :refer [chan >! >!! <! <!! go]])
   (:gen-class))
 
-; TODO temporary
-(def config {:storage-dir "/Users/joe/personal/langstroth-storage"})
 
 
 (def process-queue (chan 1000))

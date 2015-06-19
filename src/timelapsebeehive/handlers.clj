@@ -156,17 +156,16 @@
                 
 
 (defresource recording
-  [user entity duration filename]
+  [hive duration filename]
   :allowed-methods [:put :get]
   :available-media-types ["audio/wav"]
   :authorized? authorized-handler
-  :exists? true
   :exists? (fn [ctx]
              ; TODO path-for-sample
              (let [filename (if (.endsWith filename ".wav") (.substring filename 0 (- (.length filename) 4)) filename)
-                   f (new File (new File (:storage-dir config)) (str "recordings/" user "/" entity "/" filename ".wav"))
+                   f (new File (new File (:storage-dir config)) (str "recordings/" hive "/" filename ".wav"))
                    exists (.exists f)]
-               [exists {::file f}]))
+               [exists {::file f ::filename filename}]))
   
   :handle-ok (fn [ctx] (let [f (::file ctx)]
                (new FileInputStream f)))
@@ -178,6 +177,7 @@
               (with-open [is (clojure.java.io/input-stream (get-in ctx [:request :body]))]
                 (with-open [os (clojure.java.io/output-stream f)]
                   (clojure.java.io/copy is os)))
+              (db/insert-sample hive (::filename ctx))
               (prn "Put on process queue" f)
               (>!! recordings/process-queue f)
               true)))
@@ -292,7 +292,7 @@
   
   (ANY "/login" [] (wrap-basic-authentication login authenticated?))
   (ANY "/authenticated" [] (authenticated))
-  (ANY "/recordings/:user/:entity/:duration/:filename" [user entity duration filename] (recording user entity duration filename))
+  (ANY "/recordings/:hive/:duration/:filename" [hive duration filename] (recording hive duration filename))
   
   (route/resources "/" {:root "public"})
   

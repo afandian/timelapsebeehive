@@ -191,7 +191,10 @@
   :accepts ["application/json"]
   :handle-ok (fn [ctx]
                (ring-response {:headers {"Content-Type" "text/plain"
-                                         "User-Id" (:basic-authentication auth)}
+                                         "User-Id" (:basic-authentication auth)
+                                         "Hive-Id" (-> (db/hives-for-user (:basic-authentication auth))
+                                                       first
+                                                       :id)}
                                ; :basic-authentication is the response of `authenticated?`
                                :session {:user-id (:basic-authentication auth)}
                                 :body "ok"})))

@@ -141,13 +141,17 @@
                     day-range (when day-range (map (fn [date] {:date date
                                                :start-timestamp (coerce/to-long date)
                                                :end-timestamp (coerce/to-long (time/plus date (time/hours 24)))
-                                               } ) day-range))
+                                               }) day-range))
+                    
+                    days-with-recordings-range (filter #(db/any-samples-for-hive-between (:id hive) (:start-timestamp %) (:end-timestamp %)) day-range)
                     
                     response {:hive (export-hive hive)
                               :earliest-sample earliest-sample
                               :latest-sample latest-sample
-                              :day-range day-range
+                              :day-range days-with-recordings-range
                               :navigation {:page "hives"}}]
+                
+                (prn days-with-recordings-range)
                 (render-response ctx response "templates/hive.html"))))
                 
 

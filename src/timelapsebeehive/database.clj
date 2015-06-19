@@ -74,3 +74,14 @@
           (where {:hive hive-id})
           (where (>= :timestamp start))
           (where (<= :timestamp end)))))
+
+(defn insert-sample [hive-id timestamp]
+  (insert sample (values {:hive hive-id :timestamp timestamp})))
+
+(defn any-samples-for-hive-between [hive-id start end]
+  (first (select sample
+            (where {:hive hive-id})
+            (where (>= :timestamp start))
+            (where (<= :timestamp end))
+            (limit 1))))
+

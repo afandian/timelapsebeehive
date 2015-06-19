@@ -101,7 +101,7 @@
                                          :days (str (int (/ duration-minutes (* 60 24))) " days")))
             
             spectrogram-command ["sox" (str (.getAbsolutePath input-f)) "-n" "spectrogram" "-l" "-t" title "-o" (str (.getAbsolutePath output)) "-x" (str width) "-y" (str height)]
-            spectrogram-command (if legend (conj spectrogram-command "-r") spectrogram-command)
+            spectrogram-command (if-not legend (conj spectrogram-command "-r") spectrogram-command)
             ]
     (.mkdirs (.getParentFile output))
     (shell spectrogram-command)
